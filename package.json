@@ -1,0 +1,14 @@
+{
+  "name": "calculator_project",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "mocha",
+    "coverage": "nyc --reporter=html --reporter=text mocha selenium-mocha-tests/*.js"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "selenium-webdriver": "^4.19.0"
+  }
+}

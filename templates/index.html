@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Calculator</h2>
+<form method="POST" class="row g-3">
+    <div class="col-md-3">
+        <input type="number" name="num1" step="any" class="form-control" placeholder="Enter first number" required>
+    </div>
+    <div class="col-md-3">
+        <input type="number" name="num2" step="any" class="form-control" placeholder="Enter second number" required>
+    </div>
+    <div class="col-md-3">
+        <select name="operation" class="form-select" required>
+            <option value="add">Add</option>
+            <option value="subtract">Subtract</option>
+            <option value="multiply">Multiply</option>
+            <option value="divide">Divide</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">Calculate</button>
+    </div>
+</form>
+
+{% if result is not none %}
+<div class="alert alert-info mt-3">Result: <strong>{{ result }}</strong></div>
+{% endif %}
+
+<hr>
+<h3 class="mt-4">History</h3>
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Operation</th>
+            <th>A</th>
+            <th>B</th>
+            <th>Result</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in history %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>
+                <form method="POST" action="/update/{{ row[0] }}" class="d-flex gap-2">
+                    <input type="number" step="any" name="new_result_{{ row[0] }}" class="form-control form-control-sm" placeholder="New result" required>
+                    <button type="submit" class="btn btn-warning btn-sm">Update</button>
+                </form>
+            </td>
+            <td>
+                <a href="/delete/{{ row[0] }}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+@app.route("/", methods=["GET", "POST"])
+def home():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    result = None
+    if request.method == "POST":
+        # your calculator logic here
+        pass
+
+    history = get_history(session["user_id"])
+    return render_template("index.html", result=result, history=history)
